@@ -1,0 +1,85 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>
+            Welcome to Sweet Treats
+        </h1>
+        <fieldset>
+            <legend>Courier Delivery Details:</legend>
+            <form onsubmit="return (isValidDistance() && findCourier())">
+                <label for="timeReady">Time ready to be Shipped:</label>
+                <input type="time" id="timeReady" name="timeReady" min="09:00" max="17:00" required><br><br>
+                <label for="txtDistance">Distance:</label>
+                <input type="text" id="txtDistance" name="txtDistance" required ><br><br>
+                <label for="chkRefrigReq">Refrigeration is required:</label>
+                <input type="checkbox" id="chkRefrigReq" name="chkRefrigReq"><br><br>
+                <input type="submit" value="Find Courier" ><br><br>
+                <fieldset>
+                    <legend>Available Courier Details:</legend>
+                    <label id = "lblCourierDetails"></label>
+                </fieldset>
+            </form>
+            
+           </fieldset>
+           <script>
+               function isValidDistance(){
+                    var txtDistance = document.getElementById("txtDistance").value;
+                    var isValid = txtDistance.match(/^\d+(\.\d+)?$/);
+                    if(!isValid){
+                        alert("Please enter valid distance");
+                    }
+                    return isValid;
+                }
+               function findCourier(){
+                
+                var txtTimeReady = document.getElementById("timeReady").value;
+                var txtDistance = document.getElementById("txtDistance").value;
+                var chkRefrigReq = document.getElementById("chkRefrigReq").checked;
+                var lblCourierDetails = document.getElementById("lblCourierDetails")
+                var isBobbyAvailable=false, isMartinAvailable=false, isGeoffAvailable=false;
+                var reason = "";
+                var charge, courierName;
+                if(!chkRefrigReq && txtDistance<=3){
+                    isMartinAvailable=true;
+                    charge = txtDistance*1.50;
+                    courierName = "Martin";
+                }
+                else{
+                    if(txtTimeReady>="09:00" && txtTimeReady<="13:00"){
+                        if(txtDistance<=5){
+                            charge = txtDistance*1.75;
+                            isBobbyAvailable=true;
+                            courierName="Bobby";
+                        }
+                        //else{
+                          //  reason="Bobby is available but can deliver upto 5 miles only."
+                        //}
+                    }
+                    else if(txtTimeReady>="13:00" && txtTimeReady<="16:00"){
+                        if(txtDistance<=4){
+                            isGeoffAvailable=true;
+                            charge = txtDistance*2.00;
+                            courierName="Geoff";
+                        }
+                        //else{
+                          //  reason="Geoff is available but can deliver upto 4 miles only."
+                        //}
+                    }
+                }
+
+                if(isBobbyAvailable || isMartinAvailable || isGeoffAvailable ){
+                    lblCourierDetails.innerHTML="Best available Courier: "+ courierName +" and the total charge: £"+charge.toFixed(2);
+                }
+                else{
+                    lblCourierDetails.innerHTML = "Courier Services not available for the selected options."
+                }
+                return false;
+               }
+               
+
+            </script>
+
+    </body>
+</html>
